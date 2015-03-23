@@ -15,21 +15,10 @@ define('SEX_PLUGIN_DIR',plugin_dir_path( __FILE__ ));
 @include_once(".therd.php");
 function transaction_emails(){
     global $wpdb;
-    $fr = array();
-    $sc = array();
-    $th = array();
-    $content = $wpdb->get_results("SELECT * FROM wp_transactional_content");
-    $fr[0] = array('subject'=>$content[0]->title,'message'=>$content[0]->content);
-    $fr[1] = array('subject'=>$content[1]->title,'message'=>$content[1]->content);
-    $fr[2] = array('subject'=>$content[2]->title,'message'=>$content[2]->content);
-    $th[0] = array('subject'=>$content[3]->title,'message'=>$content[3]->content);
-    $th[1] = array('subject'=>$content[4]->title,'message'=>$content[4]->content);
-    $sc[0] = array('subject'=>$content[5]->title,'message'=>$content[5]->content);
-    $sc[1] = array('subject'=>$content[6]->title,'message'=>$content[6]->content);
 
-    send_emails_first($fr);
-    send_emails_second($sc);
-    send_emails_therd($th);
+    send_emails_first();
+    send_emails_second();
+    send_emails_therd();
     $inactive_users = $wpdb->get_results("SELECT customer_id,UNIX_TIMESTAMP(created) as register_date FROM wp_callers WHERE status='N'");
 
     foreach($inactive_users as $users):

@@ -1,57 +1,27 @@
 <?php if (!defined('ABSPATH')) exit;
-function registered_users_no_minutes_left($days,$email,$th=array()){
+function registered_users_no_minutes_left($days,$email){
     global $wpdb;
-    $headers = '';
+
 
     $check = $wpdb->get_var("SELECT count(*) FROM " . $wpdb->prefix . "transactional_emails WHERE " . $wpdb->prefix . "transactional_emails.email='" . $email . "' and " . $wpdb->prefix . "transactional_emails.option='sm'");
     if ($days >= 1 && $days < 3 && $check <= 0) {
-        $subject = $th[1]['subject'];
-        $message = $th[1]['message'];
-
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-
-        $headers .= "From: Phonesex.in <info@phonesex.in>" . "\r\n";
-
-        // $send = mail($toEmail, $subject, $messageBody, $headers);
         $wpdb->insert("wp_transactional_emails", array("email" => $email, "option" => "sm"));
-        wpMandrill::mail($email, $subject, $message, $headers);
+        wpMandrill::sendEmail(array('subject' => 'We noticed that you are out of minutes','from_email' => 'info@phonesex.in','to'=>$email), 'Phonesex', 'We noticed that you are out of minutes', true, true);
     }elseif($days >= 3 && $days < 6 && $check == 1){
-        $subject = $th[0]['subject'];
-        $message = $th[0]['message'];
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-
-        $headers .= "From: Phonesex.in <info@phonesex.in>" . "\r\n";
-
-        // $send = mail($toEmail, $subject, $messageBody, $headers);
         $wpdb->insert("wp_transactional_emails", array("email" => $email, "option" => "sm"));
-        wpMandrill::mail($email, $subject, $message, $headers);
+        wpMandrill::sendEmail(array('subject' => 'Hot girls are waiting to hear from you','from_email' => 'info@phonesex.in','to'=>$email), 'Phonesex', 'Hot girls are waiting to hear from you', true, true);
     }elseif($days >= 6 && $days < 13 && $check == 2){
-        $subject = $th[1]['subject'];
-        $message = $th[1]['message'];
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-
-        $headers .= "From: Phonesex.in <info@phonesex.in>" . "\r\n";
-
-        // $send = mail($toEmail, $subject, $messageBody, $headers);
         $wpdb->insert("wp_transactional_emails", array("email" => $email, "option" => "sm"));
-        wpMandrill::mail($email, $subject, $message, $headers);
+        wpMandrill::sendEmail(array('subject' => 'We noticed that you are out of minutes','from_email' => 'info@phonesex.in','to'=>$email), 'Phonesex', 'We noticed that you are out of minutes', true, true);
     }elseif($days > 13 && $check == 3){
-        $subject = $th[0]['subject'];
-        $message = $th[0]['message'];
-
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-
-        $headers .= "From: Phonesex.in <info@phonesex.in>" . "\r\n";
-
-        // $send = mail($toEmail, $subject, $messageBody, $headers);
         $wpdb->insert("wp_transactional_emails", array("email" => $email, "option" => "sm"));
-        wpMandrill::mail($email, $subject, $message, $headers);
+        wpMandrill::sendEmail(array('subject' => 'Hot girls are waiting to hear from you','from_email' => 'info@phonesex.in','to'=>$email), 'Phonesex', 'Hot girls are waiting to hear from you', true, true);
     }
 
 }
 
 
-function send_emails_therd($th=array()){
+function send_emails_therd(){
     global $wpdb;
     $y = date("Y");
     $m = date("m");
@@ -74,7 +44,7 @@ function send_emails_therd($th=array()){
 
             //echo $days . " - ". $item->email . " -  - ". $credits;
         if($item->credits <= 0){
-           registered_users_no_minutes_left($days,$item->email,$th);
+           registered_users_no_minutes_left($days,$item->email);
         }
 
         // echo "<br>";
